@@ -1,17 +1,17 @@
 # multiscale-toolbox
 
-Toolbox local para procesamiento multiescala de imagenes 2D, extraido y ordenado a partir de `Tarea1_P1y2_Jorge_Medina.ipynb`.
+Toolbox local para procesamiento multiescala de imagenes 2D,para las partes 1 y 2 de la TAREA DE PROCESAMIENTO MULTIESCALA DE IMÁGENES.
 
 Incluye:
 
-- filtros promedio, gaussianos, ideales y binomiales;
-- construccion de piramides gaussianas y laplacianas;
-- reconstruccion laplaciana;
-- upsampling por interpolacion lineal o por insercion de ceros + convolucion;
-- metricas de reconstruccion;
-- reponderacion de capas;
-- hard threshold y soft threshold;
-- utilidades simples de visualizacion.
+- filtros promedio, gaussianos, ideales y binomiales
+- construccion de piramides gaussianas y laplacianas
+- reconstruccion laplaciana
+- upsampling por pr insercion de ceros + convolución
+- metricas de reconstruccion
+- reponderacion de capas
+- hard threshold y soft threshold
+- utilidades simples de visualizacion
 
 ## Instalacion local
 
