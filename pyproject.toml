@@ -13,7 +13,6 @@ dependencies = [
   "scipy",
   "matplotlib",
   "pillow",
-  "opencv-python",
 ]
 
 [tool.setuptools]

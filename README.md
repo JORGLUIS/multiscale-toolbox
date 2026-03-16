@@ -7,7 +7,7 @@ Incluye:
 - filtros promedio, gaussianos, ideales y binomiales;
 - construccion de piramides gaussianas y laplacianas;
 - reconstruccion laplaciana;
-- upsampling por interpolacion lineal o por insercion de ceros + convolucion;
+- upsampling por insercion de ceros + convolucion;
 - metricas de reconstruccion;
 - reponderacion de capas;
 - hard threshold y soft threshold;

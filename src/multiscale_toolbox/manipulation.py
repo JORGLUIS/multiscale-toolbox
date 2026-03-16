@@ -6,9 +6,9 @@ from .pyramids import reconstruct_laplacian
 from .thresholds import hard_threshold, soft_threshold
 
 
-def reconstruct_with_multipliers(lap, residual, multipliers, upsample_method: str = "linear"):
+def reconstruct_with_multipliers(lap, residual, multipliers):
     mod_lap = [d * a for d, a in zip(lap, multipliers)]
-    rec = reconstruct_laplacian(mod_lap, residual, upsample_method=upsample_method)
+    rec = reconstruct_laplacian(mod_lap, residual)
     return rec, mod_lap
 
 
