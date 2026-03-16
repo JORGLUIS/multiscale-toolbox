@@ -1,6 +1,6 @@
 # multiscale-toolbox
 
-Toolbox local para procesamiento multiescala de imagenes 2D, extraido y ordenado a partir de `Tarea1_P1y2_Jorge_Medina.ipynb`.
+Toolbox local para procesamiento multiescala de imagenes 2D, orientado a las partes 1 y 2 de la tarea de Procesamiento Multiescala de Imagenes.
 
 Incluye:
 
@@ -37,7 +37,3 @@ lap, residual, gauss = build_laplacian_predictive(img, filters["Gauss sigma=1"],
 rec = reconstruct_laplacian(lap, residual)
 print(psnr(img, rec))
 ```
-
-## Estado respecto a GitHub
-
-El repositorio quedo listo localmente. En esta sesion no tengo `gh` ni una autenticacion activa contra GitHub, asi que no pude crear ni subir el repo remoto automaticamente.
