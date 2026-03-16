@@ -6,14 +6,14 @@ Incluye:
 
 - filtros promedio, gaussianos, ideales y binomiales;
 - construccion de piramides gaussianas y laplacianas;
-- reconstruccion laplaciana;
-- upsampling por insercion de ceros + convolucion;
+- reconstrucción laplaciana;
+- upsampling por inserción de ceros + convolución;
 - metricas de reconstruccion;
 - reponderacion de capas;
 - hard threshold y soft threshold;
-- utilidades simples de visualizacion.
+- utilidades simples de visualización.
 
-## Instalacion local
+## Instalación local
 
 ```bash
 pip install -e .
