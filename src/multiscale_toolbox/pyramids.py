@@ -5,24 +5,43 @@ from scipy import ndimage
 
 
 def downsample2(x: np.ndarray) -> np.ndarray:
-    return x[::2, ::2]
+    return x[tuple(slice(None, None, 2) for _ in range(x.ndim))]
 
 
 def upsample_by_factor(x: np.ndarray, factor) -> np.ndarray:
-    factor_int = int(round(float(factor)))
-    if factor_int < 1 or not np.isclose(factor, factor_int):
+    if np.isscalar(factor):
+        factors = (int(round(float(factor))),) * x.ndim
+    else:
+        factors = tuple(int(round(float(f))) for f in factor)
+        if len(factors) != x.ndim:
+            raise ValueError("factor sequence must match x.ndim")
+
+    if any(f < 1 for f in factors):
         raise ValueError("upsample_by_factor only supports positive integer factors")
-    if factor_int == 1:
+    if any(not np.isclose(f, fi) for f, fi in zip(np.atleast_1d(factor), factors)) and not np.isscalar(factor):
+        raise ValueError("factor sequence must contain integers")
+    if np.isscalar(factor) and not np.isclose(float(factor), factors[0]):
+        raise ValueError("factor must be an integer")
+
+    if all(f == 1 for f in factors):
         return x.astype(np.float32).copy()
 
-    h, w = x.shape
-    up = np.zeros((h * factor_int, w * factor_int), dtype=np.float32)
-    up[::factor_int, ::factor_int] = x.astype(np.float32)
+    out_shape = tuple(size * factor_int for size, factor_int in zip(x.shape, factors))
+    up = np.zeros(out_shape, dtype=np.float32)
+    up[tuple(slice(None, None, factor_int) for factor_int in factors)] = x.astype(np.float32)
 
-    ramp = np.arange(1, factor_int + 1, dtype=np.float32) / float(factor_int)
-    kernel_1d = np.concatenate([ramp, ramp[-2::-1]])
-    kernel_2d = np.outer(kernel_1d, kernel_1d).astype(np.float32)
-    return ndimage.convolve(up, kernel_2d, mode="reflect")
+    y = up
+    for axis, factor_int in enumerate(factors):
+        if factor_int == 1:
+            continue
+        ramp = np.arange(1, factor_int + 1, dtype=np.float32) / float(factor_int)
+        kernel_1d = np.concatenate([ramp, ramp[-2::-1]])
+        y = ndimage.convolve1d(y, kernel_1d, axis=axis, mode="reflect")
+    return y.astype(np.float32)
+
+
+def crop_to_shape(x: np.ndarray, target_shape) -> np.ndarray:
+    return x[tuple(slice(0, size) for size in target_shape)]
 
 
 def build_gaussian_pyramid(image: np.ndarray, scaling_fn, levels: int):
@@ -56,7 +75,7 @@ def build_laplacian_predictive(
     lap = []
     for i in range(len(gauss) - 1):
         pred = upsample_by_factor(gauss[i + 1], 2)
-        pred = pred[: gauss[i].shape[0], : gauss[i].shape[1]]
+        pred = crop_to_shape(pred, gauss[i].shape)
         lap.append(gauss[i] - pred)
 
     residual = gauss[-1]
@@ -70,6 +89,6 @@ def reconstruct_laplacian(
     current = residual
     for d in reversed(lap):
         pred = upsample_by_factor(current, 2)
-        pred = pred[: d.shape[0], : d.shape[1]]
+        pred = crop_to_shape(pred, d.shape)
         current = pred + d
     return current
