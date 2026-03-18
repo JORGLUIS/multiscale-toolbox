@@ -31,38 +31,3 @@ def show_pyramid(levels, title, cmap="gray", symmetric=False, max_cols=6):
     fig.tight_layout()
     plt.show()
     plt.close(fig)
-
-
-def show_volume_slices(volume, title, indices=None, cmap="gray", symmetric=False):
-    if volume.ndim != 3:
-        raise ValueError("show_volume_slices expects a 3D volume")
-
-    if indices is None:
-        indices = tuple(size // 2 for size in volume.shape)
-    z, y, x = indices
-
-    slices = [
-        volume[z, :, :],
-        volume[:, y, :],
-        volume[:, :, x],
-    ]
-    labels = [
-        f"Axial z={z}",
-        f"Coronal y={y}",
-        f"Sagittal x={x}",
-    ]
-
-    fig, axes = plt.subplots(1, 3, figsize=(13, 4))
-    for ax, img, label in zip(axes, slices, labels):
-        if symmetric:
-            vmax = max(float(np.max(np.abs(img))), 1e-6)
-            ax.imshow(img.T, cmap=cmap, origin="lower", vmin=-vmax, vmax=vmax)
-        else:
-            ax.imshow(img.T, cmap=cmap, origin="lower")
-        ax.set_title(label)
-        ax.axis("off")
-
-    fig.suptitle(title)
-    fig.tight_layout()
-    plt.show()
-    plt.close(fig)
